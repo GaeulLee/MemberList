@@ -26,7 +26,7 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .black
+        view.backgroundColor = .white
         
         setDatas()
         setNavigationBar()
@@ -47,6 +47,9 @@ final class ViewController: UIViewController {
     
     @objc func plusButtonTapped() {
         let detailVC = DetailViewController()
+        
+        detailVC.delegate = self // 여기에 대리자 설정이 안되어 있어서 새로운 멤버 추가시엔 커스텀 델리게이트가 작동하지 않았음...
+        
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
@@ -97,6 +100,10 @@ final class ViewController: UIViewController {
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        // print(#function)
+        // print(memberListManager.getMembersList().count)
+        
         return memberListManager.getMembersList().count
     }
     
@@ -133,9 +140,15 @@ extension ViewController: MemberDelegate {
     func addNewMember(_ member: Member) {
         memberListManager.makeNewMember(member)
         tableView.reloadData()
+        
+        print(#function)
+        print(memberListManager.getMembersList().count)
     }
     
     func updateMember(index: Int, _ member: Member) {
+
+        // print(#function)
+        
         memberListManager.updateMemberInfo(index: index, member)
         tableView.reloadData()
     }

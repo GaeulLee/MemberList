@@ -93,20 +93,23 @@ final class DetailViewController: UIViewController {
             
             // 새 멤버 생성
             var newMember = Member(name: name, age: age, phone: phoneNumber, address: address)
-            newMember.memberImage = detailView.mainImageView.image // ?
+            newMember.memberImage = detailView.mainImageView.image
             
             // 새 멤버 등록
-//            let index = navigationController!.viewControllers.count - 2
-//            let vc = navigationController?.viewControllers[index] as! ViewController
-//            vc.memberListManager.makeNewMember(newMember)
+            // let index = navigationController!.viewControllers.count - 2
+            // let vc = navigationController?.viewControllers[index] as! ViewController
+            // vc.memberListManager.makeNewMember(newMember)
             
             // 델리게이트 방식으로 구현⭐️
             delegate?.addNewMember(newMember)
             
+            print(#function)
+            print(newMember.name!)
+            
         // 2) 멤버가 있다면 (변경된 멤버 내용을 업데이트)
         } else {
             // 이미지뷰에 있는 이미지를 그대로 다시 멤버에 저장
-            member!.memberImage = detailView.mainImageView.image // ?
+            member!.memberImage = detailView.mainImageView.image
             
             let memberId = Int(detailView.memberIdTextField.text!) ?? 0
             member!.name = detailView.nameTextField.text ?? ""
@@ -114,13 +117,13 @@ final class DetailViewController: UIViewController {
             member!.phone = detailView.phoneNumberTextField.text ?? ""
             member!.address = detailView.addressTextField.text ?? ""
             
-            // 뷰에도 바뀐 멤버 전달 ??
+            // 뷰에도 바뀐 멤버 전달
             detailView.member = member
             
             // 바뀐 멤버 수정
-//            let index = navigationController!.viewControllers.count - 2
-//            let vc = navigationController?.viewControllers[index] as! ViewController
-//            vc.memberListManager.updateMemberInfo(index: memberId, member!)
+            // let index = navigationController!.viewControllers.count - 2
+            // let vc = navigationController?.viewControllers[index] as! ViewController
+            // vc.memberListManager.updateMemberInfo(index: memberId, member!)
             
             // 델리게이트 방식으로 구현⭐️
             delegate?.updateMember(index: memberId, member!)
