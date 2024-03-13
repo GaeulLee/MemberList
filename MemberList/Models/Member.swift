@@ -7,6 +7,14 @@
 
 import UIKit
 
+
+// custom delegate
+protocol MemberDelegate: AnyObject { // 클래스에서만 채택할 수 있는 프로토콜암 
+    func addNewMember(_ member: Member)
+    func updateMember(index: Int, _ member: Member)
+}
+
+
 struct Member {
     // 지연 저장 속성
     lazy var memberImage: UIImage? = {

@@ -35,11 +35,12 @@ final class ViewController: UIViewController {
     }
     
     // 바뀌거나 새로 등록된 멤버 정보를 업데이트 하기 위해 viewWillAppear 오버라이드!!
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        tableView.reloadData()
-    }
+    // 커스텀 델리게이트를 사용하기 때문에 viewWillAppear 메서드 필요 X
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        tableView.reloadData()
+//    }
     
     
     // MARK: - objc
@@ -115,12 +116,28 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // move to next vc
         let detailVC = DetailViewController()
+        detailVC.delegate = self
         
         let array = memberListManager.getMembersList()
         detailVC.member = array[indexPath.row]
         
         navigationController?.pushViewController(detailVC, animated: true)
         
+    }
+    
+}
+
+// use custom delegate
+extension ViewController: MemberDelegate {
+    
+    func addNewMember(_ member: Member) {
+        memberListManager.makeNewMember(member)
+        tableView.reloadData()
+    }
+    
+    func updateMember(index: Int, _ member: Member) {
+        memberListManager.updateMemberInfo(index: index, member)
+        tableView.reloadData()
     }
     
 }

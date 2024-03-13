@@ -236,6 +236,9 @@ class DetailView: UIView {
         
         setStackView()
         setConstraints()
+        setNotification()
+        
+        memberIdTextField.delegate = self
         
     }
     
@@ -244,17 +247,40 @@ class DetailView: UIView {
     }
     
     
+    // MARK: - private
+    
+    // MARK: - 노티피케이션 설정
+
+    private func setNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(moveUpAction), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(moveDownAction), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc func moveUpAction() {
+        stackViewTopConstraint.constant = -20
+        UIView.animate(withDuration: 0.2) {
+            self.layoutIfNeeded()
+        }
+    }
+
+    @objc func moveDownAction() {
+        stackViewTopConstraint.constant = 10
+        UIView.animate(withDuration: 0.2) {
+            self.layoutIfNeeded()
+        }
+    }
+    
+    // Observer가 사라지지 않을 수도 있기 때문에 소멸자 구현
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    
     //MARK: - 오토레이아웃 셋팅
     
     let labelWidth: CGFloat = 70 // 레이블 넓이 지정
     var stackViewTopConstraint: NSLayoutConstraint! // 애니메이션을 위한 속성
-    
-    
-    // 오토레이아웃 업데이트
-//    override func updateConstraints() {
-//        setConstraints()
-//        super.updateConstraints()
-//    }
     
     private func setStackView() {
         self.addSubview(stackView)
@@ -290,5 +316,16 @@ class DetailView: UIView {
             stackView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20)
         ])
     }
+}
 
+extension DetailView: UITextFieldDelegate {
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        // 멤버 아이디를 수정 못하도록 설정
+        if textField == memberIdTextField {
+            return false
+        }
+        
+        return true
+    }
 }
